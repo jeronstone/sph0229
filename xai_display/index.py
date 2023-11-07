@@ -1,6 +1,9 @@
 import webbrowser
 import os
 
+tree_lut = [1,2,3]
+
+'''
 turns = {
     1: {
         "image": "local_im_1.jpeg",
@@ -12,9 +15,16 @@ turns = {
     },
 
 }
+'''
+
+def get_turn_image(turn):
+    return "local_im_{turn_num}.jpeg".format(turn_num=turn)
+
+def get_turn_exp_fi(turn):
+    return "local_txt_{turn_num}.txt".format(turn_num=turn)
 
 def get_html(turn):
-    f = open(turns[turn]["text"],"r")
+    f = open(get_turn_exp_fi(turn),"r")
     file_text = f.read()
     f.close()
     return '''
@@ -37,13 +47,40 @@ def get_html(turn):
     </body>
     </html>
     '''.format(
-        image=turns[turn]["image"],
+        image=get_turn_image(turn),
         text=file_text
     )
 
-for i in range(1,2):
+def refresh(turn):
     f = open("index.html","w")
-    f.write(get_html(i))
+    f.write(get_html(turn))
     f.close()
-
     webbrowser.open(os.getcwd() + "/index.html")
+
+level=0
+current=1
+refresh(current)
+
+while(1):
+    input = input()
+    level+=1
+    if input == "l":
+        current = 2**level + current - 1
+    elif input == "r":
+        current = 2**level + current
+    else:
+        exit(1)
+    refresh(current)
+
+'''
+    <div class="container p-5 my-5 bg-primary text-white">
+        <script>
+            function goLeft() {
+            }
+            function goRight() {
+            }
+        </script>
+        <button onclick="goLeft()" class="btn btn-success">Left Tree</a>
+        <button onclick="goRight()" class="btn btn-danger">Right Tree</button>
+    </div>
+'''
