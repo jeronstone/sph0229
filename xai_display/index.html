@@ -8,9 +8,19 @@
 </head>
 <body>
     <div class="container p-5 my-5 bg-primary text-white">
+        <div id="load-t" class="d-flex justify-content-center">
+            <div class="spinner-border" role="status">
+                <span class="sr-only"></span>
+            </div>
+        </div>
         <img id="image-t" src="" class="img-fluid rounded mx-auto d-block">
     </div>
     <div class="container p-5 my-5 bg-primary text-white">
+        <div id="load-b" class="d-flex justify-content-center">
+            <div class="spinner-border" role="status">
+                <span class="sr-only"></span>
+            </div>
+        </div>
         <p id="txt-b" class="lead text-center"></h1>
     </div>
     <script>
@@ -20,12 +30,17 @@
         });
         socket.addEventListener("message",(event) => {
             console.log("rx");
+            var msg = JSON.parse(event.data);
             const image = document.getElementById("image-t");
             const text = document.getElementById("txt-b");
-            var msg = JSON.parse(event.data);
-            console.log(msg.image_link)
-            image.src = msg.image_link
-            text.innerHTML = msg.text_raw
+            image.src = msg.image_link;
+            text.innerHTML = msg.text_raw;
+            try {
+                document.getElementById("load-t").outerHTML = "";
+                document.getElementById("load-b").outerHTML = "";
+            } catch {
+                console.log(":)")
+            }
         });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>

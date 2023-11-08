@@ -5,7 +5,6 @@ from websocket_server import WebsocketServer
 import json
 import threading
 
-tree_lut = [1,2,3]
 ws_server: WebsocketServer
 
 def get_turn_image(turn):
@@ -16,6 +15,8 @@ def get_turn_exp_fi(turn):
 
 #webbrowser.open(os.getcwd() + "/index.html")
 
+current=0
+
 try:
     ws_server=WebsocketServer(port=8888, host='')
 except OSError as e:
@@ -24,7 +25,8 @@ except OSError as e:
 
 def new_client(client, server: WebsocketServer):
     print("new connection")
-    send_info(1)
+    if (current>0):
+        send_info(current)
 
 def send_info(current):
     to_send["image_link"] = get_turn_image(current)
@@ -40,17 +42,14 @@ threading.Thread(target=ws_server.run_forever, name='Local Server', daemon=True)
 
 to_send = {}
 
-level=0
-current=1
-
 while(1):
     tree_in = input()
-    level+=1
-    current = 2**level + current
+    current = 2*current+1
     if tree_in == "l":
-        current-=1
-    elif tree_in == "r":
         pass
+    elif tree_in == "r":
+        current+=1
     else:
         exit(1)
+    print(current)
     send_info(current)
