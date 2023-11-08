@@ -4,6 +4,7 @@ import os
 from websocket_server import WebsocketServer
 import json
 import threading
+from time import sleep
 
 ws_server: WebsocketServer
 
@@ -13,7 +14,6 @@ def get_turn_image(turn):
 def get_turn_exp_fi(turn):
     return "local_txt_{turn_num}.txt".format(turn_num=turn)
 
-#webbrowser.open(os.getcwd() + "/index.html")
 
 current=0
 
@@ -34,11 +34,19 @@ def send_info(current):
     to_send["text_raw"] = f.read()
     for client in ws_server.clients:
         ws_server.send_message(client, json.dumps(to_send))
-    print("ws send")
+    print("ws send 1 ")
+    # sleep(5)
+    # to_send['image_link'] = "done"
+    # to_send["text_raw"] = f.read()
+    # for client in ws_server.clients:
+    #     ws_server.send_message(client, json.dumps(to_send))
+    # print("ws send 2")
     f.close()
 
 ws_server.set_fn_new_client(new_client)
 threading.Thread(target=ws_server.run_forever, name='Local Server', daemon=True).start()
+
+webbrowser.open(os.getcwd() + "/index.html")
 
 to_send = {}
 
