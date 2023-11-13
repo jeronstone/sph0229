@@ -5,8 +5,31 @@ from websocket_server import WebsocketServer
 import json
 import threading
 from time import sleep
+import random
 
 ws_server: WebsocketServer
+
+prob_good = .3
+prob_okay = .4
+prob_bad = .3
+processing_delay = 1 # seconds
+
+turn = 0    # 0 your turn
+            # 1 my turn
+
+doc = "g"
+
+def rand_doc():
+    prob = random.random()
+    print(prob)
+    if (prob < prob_good):
+        doc="g"
+    elif (prob-prob_good < prob_okay):
+        doc="ok"
+    else:
+        doc="b"
+    print(doc)
+    return doc
 
 class Node:
 
@@ -17,11 +40,11 @@ class Node:
         self.state = state
         self.children=children
 
-    def get_turn_image(self):
-        return "local_im_{turn_num}.jpeg".format(turn_num=self.state)
+    def get_turn_image(self, doc):
+        return "local_im_{turn_num}_{doctrine}.jpeg".format(turn_num=self.state, doctrine=doc)
 
-    def get_turn_exp_fi(self):
-        return "local_txt_{turn_num}.txt".format(turn_num=self.state)
+    def get_turn_exp_fi(self, doc):
+        return "local_txt_{turn_num}_{doctrine}.txt".format(turn_num=self.state, doctrine=doc)
     
     def add_children(self, children):
         children += children
@@ -52,43 +75,60 @@ def new_client(client, server: WebsocketServer):
 
 to_send = {}
 
-def send_info():
-    to_send["op"] = "info"
-    to_send["image_link"] = curr.get_turn_image()
-    f = open(curr.get_turn_exp_fi())
+def send_info(delay):
+    sleep(delay)
+    to_send["op"] = "state"
+    doc = rand_doc()
+    to_send["image_link"] = curr.get_turn_image(doc)
+    f = open(curr.get_turn_exp_fi(doc))
     to_send["text_raw"] = f.read()
     for client in ws_server.clients:
         ws_server.send_message(client, json.dumps(to_send))
     print("ws send info")
     f.close()
 
-def send_blank():
-    to_send["op"] = "blank"
+def send_blank(delay):
+    sleep(delay)
+    to_send["op"] = "state"
     to_send["image_link"] = "blank_focal.jpeg"
     to_send["text_raw"] = ""
     for client in ws_server.clients:
         ws_server.send_message(client, json.dumps(to_send))
     print("ws send blank")
 
+def send_status(delay, status):
+    sleep(delay)
+    to_send["op"] = "status"
+    to_send["text_status"] = status
+    for client in ws_server.clients:
+        ws_server.send_message(client, json.dumps(to_send))
+    print("ws send status")
+
 ws_server.set_fn_new_client(new_client)
 threading.Thread(target=ws_server.run_forever, name='Local Server', daemon=True).start()
 
 webbrowser.open(os.getcwd() + "/index.html")
 
-switch = 1
-
 while(1):
-    tree_in = input()
-    if (switch == 0):
-        if (tree_in != "r"):
+    if (turn == 0):
+        button_in = input()
+        if (button_in != "r"):
             continue
-        switch = 1
-        send_blank()
-    else:
+        tree_in = input()
         try:
             tree_in = int(tree_in)
         except:
             continue
-        switch = 0
+
+        turn = 1
+        send_status(0, "Processing...")
         curr=curr.children[tree_in]
-        send_info()
+        x = threading.Thread(target=send_info, args=(processing_delay,))
+        x.start()
+        y = threading.Thread(target=send_status, args=(processing_delay,"My Turn"))
+        y.start()
+    if (turn == 1):
+        button_in = input()
+        turn = 0
+        send_blank(0)
+        send_status(0, "Your Turn")
