@@ -4,17 +4,40 @@ import os
 from websocket_server import WebsocketServer
 import json
 import threading
+from time import sleep
 
-tree_lut = [1,2,3]
 ws_server: WebsocketServer
 
-def get_turn_image(turn):
-    return "local_im_{turn_num}.jpeg".format(turn_num=turn)
+class Node:
 
-def get_turn_exp_fi(turn):
-    return "local_txt_{turn_num}.txt".format(turn_num=turn)
+    state=0
+    children=[]
 
-#webbrowser.open(os.getcwd() + "/index.html")
+    def __init__(self, state, children):
+        self.state = state
+        self.children=children
+
+    def get_turn_image(self):
+        return "local_im_{turn_num}.jpeg".format(turn_num=self.state)
+
+    def get_turn_exp_fi(self):
+        return "local_txt_{turn_num}.txt".format(turn_num=self.state)
+    
+    def add_children(self, children):
+        children += children
+
+    def add_child(self, child):
+        self.add_children([child])
+
+    def remove_children(self, to_remove):
+        for child in to_remove:
+            if child in self.children:
+                self.children.remove(child)
+
+    def remove_child(self, to_remove):
+        self.remove_children([to_remove])
+
+curr=Node(0, [Node(1, [Node(3, []), Node(4, []), Node(5,[])]), Node(2, [Node(6,[])])])
 
 try:
     ws_server=WebsocketServer(port=8888, host='')
@@ -24,33 +47,48 @@ except OSError as e:
 
 def new_client(client, server: WebsocketServer):
     print("new connection")
-    send_info(1)
+    if (curr.state>0):
+        send_info()
 
-def send_info(current):
-    to_send["image_link"] = get_turn_image(current)
-    f = open(get_turn_exp_fi(current))
+to_send = {}
+
+def send_info():
+    to_send["op"] = "info"
+    to_send["image_link"] = curr.get_turn_image()
+    f = open(curr.get_turn_exp_fi())
     to_send["text_raw"] = f.read()
     for client in ws_server.clients:
         ws_server.send_message(client, json.dumps(to_send))
-    print("ws send")
+    print("ws send info")
     f.close()
+
+def send_blank():
+    to_send["op"] = "blank"
+    to_send["image_link"] = "blank_focal.jpeg"
+    to_send["text_raw"] = ""
+    for client in ws_server.clients:
+        ws_server.send_message(client, json.dumps(to_send))
+    print("ws send blank")
 
 ws_server.set_fn_new_client(new_client)
 threading.Thread(target=ws_server.run_forever, name='Local Server', daemon=True).start()
 
-to_send = {}
+webbrowser.open(os.getcwd() + "/index.html")
 
-level=0
-current=1
+switch = 1
 
 while(1):
     tree_in = input()
-    level+=1
-    current = 2**level + current
-    if tree_in == "l":
-        current-=1
-    elif tree_in == "r":
-        pass
+    if (switch == 0):
+        if (tree_in != "r"):
+            continue
+        switch = 1
+        send_blank()
     else:
-        exit(1)
-    send_info(current)
+        try:
+            tree_in = int(tree_in)
+        except:
+            continue
+        switch = 0
+        curr=curr.children[tree_in]
+        send_info()
