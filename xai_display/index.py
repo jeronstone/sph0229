@@ -75,6 +75,8 @@ threading.Thread(target=ws_server.run_forever, name='Local Server', daemon=True)
 
 webbrowser.open(os.getcwd() + "/index.html")
 
+webbrowser.open(os.getcwd() + "/index.html")
+
 switch = 1
 
 while(1):
