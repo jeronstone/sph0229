@@ -1,2 +1,3 @@
 *.txt
 *.jpeg
+!*blank_focal.jpeg
