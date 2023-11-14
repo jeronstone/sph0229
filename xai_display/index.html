@@ -34,10 +34,11 @@
         socket.addEventListener("message",(event) => {
             console.log("rx");
             var msg = JSON.parse(event.data);
+            console.log(msg)
             const image = document.getElementById("image-t");
             const text = document.getElementById("txt-b");
             const status = document.getElementById("txt-status");
-            if (msg.op == "state") {
+            if (msg.op == "info") {
                 image.src = msg.image_link;
                 text.innerHTML = msg.text_raw;
             } else if (msg.op == "status") {
