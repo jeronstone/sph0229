@@ -18,7 +18,7 @@ prob_good = .3
 prob_okay = .4
 prob_bad = .3
 
-processing_delay = 3 # seconds
+processing_delay = 5 # seconds
 
 turn = 0    # 0 your turn
             # 1 my turn
