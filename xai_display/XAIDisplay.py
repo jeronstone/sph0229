@@ -5,8 +5,10 @@ import json
 import webbrowser
 import os
 import random
+from time import sleep
 
-LOUD:False
+def new_client(client, server: WebsocketServer):
+    pass
 
 class XAIDisplay():
 
@@ -18,13 +20,11 @@ class XAIDisplay():
         except OSError as e:
             print(e)
             exit(1)
-        self.ws_server.set_fn_new_client(self.new_client)
+        self.ws_server.set_fn_new_client(new_client)
         threading.Thread(target=self.ws_server.run_forever, name='Local Server', daemon=True).start()
         webbrowser.open(os.getcwd() + "/index.html")
+        sleep(1)
     
-    def new_client(client, server: WebsocketServer):
-        pass
-
     def send_image_and_text(self, image, text):
         to_send = {}
         to_send["op"] = "imgntxt"
@@ -44,7 +44,7 @@ class XAIDisplay():
         to_send["text_raw"] = text
         self.send_to_display(to_send)
         
-    def send_status_text(self, turn):
+    def send_status(self, turn):
         to_send = {}
         to_send["op"] = "status"
         if (turn == 0):
@@ -57,9 +57,6 @@ class XAIDisplay():
     def send_to_display(self, to_send):
         for client in self.ws_server.clients:
             self.ws_server.send_message(client, json.dumps(to_send))
-        if (LOUD):
-            print("ws send info")
-            print(to_send)
 
 # todo probably move this
 # policy probs

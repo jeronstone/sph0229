@@ -2,6 +2,7 @@ import socket # To communicate with Baxter
 from pynput import keyboard # To collect Button inputs
 from ctypes import windll # To send triggers
 import time # To send Triggers
+from XAIDisplay import *
 
 # Trigger Names:
 #1- VS done
@@ -10,6 +11,8 @@ import time # To send Triggers
 #20 - Human's Turn
 #40 - red
 #60 - green
+
+display: XAIDisplay()
 
 def sendTrigger(val):
     pport = windll.inpoutx64
@@ -95,8 +98,10 @@ def baxterTurn(method, xai, solvedState):
         sendTrigger(buttonVal)
 
         get_random_policy()
-        send_image(currMP.goodimage)
-        sendtext(currMP.goodtext)
+        display.send_image("path")
+        display.send_exp_text("explanation")
+        display.send_image_and_text("path","exp")
+        display.send_status(0)
 
         
     else:
