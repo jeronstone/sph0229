@@ -1,6 +1,7 @@
 *.txt
 *.jpeg
 !*blank_focal.jpeg
+xai_display/from_others.py
 exit_interviews/bin
 exit_interviews/include
 exit_interviews/lib*
