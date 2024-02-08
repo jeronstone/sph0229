@@ -13,7 +13,7 @@ Clone this repo, then:
 
 Use ```deactivate``` to exit venv
 
-## Running on exit interviews
+## Running speech to text on exit interviews
 
 1. Place the .AVI file in the venv directory
 2. Rename the file to be in the format: P## (example: P21, P30, P36, etc.)
