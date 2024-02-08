@@ -4,8 +4,9 @@ Note: any command with `python` may need to be `python3` instead
 
 ## Setting up Venv
 
+Clone this repo, then:    
 ```python -m venv /path/to/new/virtual/environment```     
-```source bin/activate/```     
+```source bin/activate/``` (use this command to reactivate venv later - other commands only need to be run on first activation)     
 ```sudo apt-get update```     
 ```sudo apt update && sudo apt install ffmpeg```     
 ```pip install -r requirements.txt```     
