@@ -1,3 +1,6 @@
+*.txt
+*.jpeg
+!*blank_focal.jpeg
 exit_interviews/bin
 exit_interviews/include
 exit_interviews/lib*
