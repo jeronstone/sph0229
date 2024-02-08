@@ -4,6 +4,8 @@ Note: any command with `python` may need to be `python3` instead
 
 ## Setting up Venv
 
+Note: these steps are for Ubuntu and use apt. Steps for setting up venv on windows will be slightly different - download ffmpeg based on their website instructions.    
+
 Clone this repo, then:    
 ```python -m venv /path/to/new/virtual/environment```     
 ```source bin/activate/``` (use this command to reactivate venv later - other commands only need to be run on first activation)     
