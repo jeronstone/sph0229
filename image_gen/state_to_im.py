@@ -19,7 +19,7 @@ gatew = 25
 borderw = 10
 
 def get_im_from_state(state):
-    image = Image.new(mode="RGB",size=(h,w),color="white")
+    image = Image.new(mode="RGB", size=(h,w), color="white")
 
     draw = ImageDraw.Draw(image)
     y0 = 0
@@ -64,16 +64,16 @@ def get_im_from_state(state):
         
         # TODO change colors based on characters (?), 
         # or if curr->next state, determine diff and color that way?
-        draw.rectangle(rect,fill="blue",outline='black',width=2)
+        draw.rectangle(rect, fill="blue", outline='black', width=2)
 
     # draw exit gates
-    draw.rectangle(((x0,stepy*4-(gateh/2)),(x0+gatew,stepy*4+(gateh/2))),fill=True)
-    draw.rectangle(((x0,stepy*5-(gateh/2)),(x0+gatew,stepy*5+(gateh/2))),fill=True)
+    draw.rectangle(((x0, (stepy*4) - (gateh/2)), (x0 + gatew, (stepy*4) + (gateh/2))), fill=True)
+    draw.rectangle(((x0, (stepy*5) - (gateh/2)), (x0 + gatew, (stepy*5) + (gateh/2))), fill=True)
     
     del draw
 
     # add border
-    image = ImageOps.expand(image,border=borderw,fill='black')
+    image = ImageOps.expand(image, border=borderw, fill='black')
 
     #print(state_dict)
     
