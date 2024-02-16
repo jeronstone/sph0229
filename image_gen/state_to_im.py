@@ -11,6 +11,13 @@ dimy = 7
 # buffer for block offset from grid squares
 buffer = 5
 
+# gate height and width
+gateh = 20
+gatew = 25
+
+# border size
+borderw = 10
+
 def get_im_from_state(state):
     image = Image.new(mode="RGB",size=(h,w),color="white")
 
@@ -56,13 +63,13 @@ def get_im_from_state(state):
         draw.rectangle(rect,fill="blue",outline='black',width=2)
 
     # draw exit gates
-    draw.rectangle(((x0,stepy*4-10),(x0+25,stepy*4+10)),fill=True)
-    draw.rectangle(((x0,stepy*5-10),(x0+25,stepy*5+10)),fill=True)
+    draw.rectangle(((x0,stepy*4-(gateh/2)),(x0+gatew,stepy*4+(gateh/2))),fill=True)
+    draw.rectangle(((x0,stepy*5-(gateh/2)),(x0+gatew,stepy*5+(gateh/2))),fill=True)
     
     del draw
 
     # add border
-    image = ImageOps.expand(image,border=10,fill='black')
+    image = ImageOps.expand(image,border=borderw,fill='black')
 
     #print(state_dict)
     
