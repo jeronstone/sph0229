@@ -25,18 +25,34 @@ def get_im_from_state(state):
         line = ((x0, i), (xf, i))
         draw.line(line, fill=128)
 
+    state_dict = {}
+    for i in range(len(state)):
+        for j in range(len(state[0])):
+            # if not state[i][j] == '_':
+            #     square = ((x0 + stepx*j, y0 + stepy*i),
+            #               (x0 + stepx*(j+1), y0 + stepy*(i+1)))
+            #     draw.rectangle(square,fill="blue",outline='black')
+            if not state[i][j] == '_':
+                if not state[i][j] in state_dict.keys():
+                    state_dict[state[i][j]] = [(i,j)]
+                else:
+                    state_dict[state[i][j]].append((i,j))
+
+    for k, v in state_dict.items():
+        maxvx = max(v, key = lambda i : i[0])[0]
+        maxvy = max(v, key = lambda i : i[1])[1]
+        minvx = min(v, key = lambda i : i[0])[0]
+        minvy = min(v, key = lambda i : i[1])[1]
+
+        rect = ((x0 + stepx*minvy,y0+stepy*minvx),(x0+stepx*(maxvy+1),y0+stepy*(maxvx+1)))
+        draw.rectangle(rect,fill="blue",outline='black',width=2)
+
     draw.rectangle(((xf-25,stepy*2-10),(xf,stepy*2+10)),fill=True)
     draw.rectangle(((xf-25,stepy*3-10),(xf,stepy*3+10)),fill=True)
 
-    for i in range(len(state)):
-        for j in range(len(state[0])):
-            # TODO do rectangles as character dependent
-            if not state[i][j] == '_':
-                square = ((x0 + stepx*j, y0 + stepy*i),
-                          (x0 + stepx*(j+1), y0 + stepy*(i+1)))
-                draw.rectangle(square,fill="blue",outline='black')
-
     del draw
+
+    print(state_dict)
     
     image.show()
 
