@@ -1,8 +1,8 @@
 from PIL import Image, ImageDraw
 
 # pixel dimension of image
-h = 600
-w = 600
+h = 602
+w = 602
 
 # grid dimensions
 dimx = 7
