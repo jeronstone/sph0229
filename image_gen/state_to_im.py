@@ -59,7 +59,11 @@ def get_im_from_state(state):
         minvx = min(v, key = lambda i : i[0])[0]
         minvy = min(v, key = lambda i : i[1])[1]
 
-        rect = ((x0+stepx*minvy+buffer,y0+stepy*minvx+buffer),(x0+stepx*(maxvy+1)-buffer,y0+stepy*(maxvx+1)-buffer))
+        rect = ((x0 + (stepx*minvy) + buffer, y0 + (stepy*minvx) + buffer),
+                (x0 + (stepx*(maxvy+1)) - buffer, y0 + (stepy*(maxvx+1)) - buffer))
+        
+        # TODO change colors based on characters (?), 
+        # or if curr->next state, determine diff and color that way?
         draw.rectangle(rect,fill="blue",outline='black',width=2)
 
     # draw exit gates
