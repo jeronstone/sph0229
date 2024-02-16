@@ -1,3 +1,6 @@
+# Some testing code
+#
+
 from PIL import Image, ImageDraw
 
 h = 600

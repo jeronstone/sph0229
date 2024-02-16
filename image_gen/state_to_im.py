@@ -6,6 +6,8 @@ w = 600
 dimx = 7
 dimy = 7
 
+buffer = 5
+
 def get_im_from_state(state):
     image = Image.new(mode="RGB",size=(h,w),color="white")
 
@@ -44,7 +46,7 @@ def get_im_from_state(state):
         minvx = min(v, key = lambda i : i[0])[0]
         minvy = min(v, key = lambda i : i[1])[1]
 
-        rect = ((x0 + stepx*minvy,y0+stepy*minvx),(x0+stepx*(maxvy+1),y0+stepy*(maxvx+1)))
+        rect = ((x0+stepx*minvy+buffer,y0+stepy*minvx+buffer),(x0+stepx*(maxvy+1)-buffer,y0+stepy*(maxvx+1)-buffer))
         draw.rectangle(rect,fill="blue",outline='black',width=2)
 
     draw.rectangle(((xf-25,stepy*2-10),(xf,stepy*2+10)),fill=True)
@@ -54,7 +56,8 @@ def get_im_from_state(state):
 
     print(state_dict)
     
-    image.show()
+    #image.show()
+    image.save("test_state.png")
 
 
 curState = [['I', 'I', '_', 'L', 'L','L', 'i'],
