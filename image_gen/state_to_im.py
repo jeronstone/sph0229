@@ -56,9 +56,9 @@ def get_im_from_state(state):
         draw.rectangle(rect,fill="blue",outline='black',width=2)
 
     # draw exit gates
-    draw.rectangle(((xf-25,stepy*2-10),(xf,stepy*2+10)),fill=True)
-    draw.rectangle(((xf-25,stepy*3-10),(xf,stepy*3+10)),fill=True)
-
+    draw.rectangle(((x0,stepy*4-10),(x0+25,stepy*4+10)),fill=True)
+    draw.rectangle(((x0,stepy*5-10),(x0+25,stepy*5+10)),fill=True)
+    
     del draw
 
     #print(state_dict)

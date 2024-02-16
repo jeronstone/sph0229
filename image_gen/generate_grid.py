@@ -27,8 +27,8 @@ for i in range(0, image.height, stepx):
     line = ((x0, i), (xf, i))
     draw.line(line, fill=128)
 
-draw.rectangle(((xf-25,stepy*2-10),(xf,stepy*2+10)),fill=True)
-draw.rectangle(((xf-25,stepy*3-10),(xf,stepy*3+10)),fill=True)
+draw.rectangle(((x0,stepy*4-10),(x0+25,stepy*4+10)),fill=True)
+draw.rectangle(((x0,stepy*5-10),(x0+25,stepy*5+10)),fill=True)
 
 del draw
 
