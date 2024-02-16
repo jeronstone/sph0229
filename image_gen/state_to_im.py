@@ -1,4 +1,4 @@
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageOps
 
 # pixel dimension of image
 h = 602
@@ -60,6 +60,9 @@ def get_im_from_state(state):
     draw.rectangle(((x0,stepy*5-10),(x0+25,stepy*5+10)),fill=True)
     
     del draw
+
+    # add border
+    image = ImageOps.expand(image,border=10,fill='black')
 
     #print(state_dict)
     
