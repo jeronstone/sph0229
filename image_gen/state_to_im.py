@@ -1,11 +1,14 @@
 from PIL import Image, ImageDraw
 
+# pixel dimension of image
 h = 600
 w = 600
 
+# grid dimensions
 dimx = 7
 dimy = 7
 
+# buffer for block offset from grid squares
 buffer = 5
 
 def get_im_from_state(state):
@@ -19,6 +22,7 @@ def get_im_from_state(state):
     stepy = int(image.width/dimx)
     stepx = int(image.height/dimy)
 
+    # draw grid
     for i in range(0, image.width, stepy):
         line = ((i, y0), (i, yf))
         draw.line(line, fill=128)
@@ -27,6 +31,7 @@ def get_im_from_state(state):
         line = ((x0, i), (xf, i))
         draw.line(line, fill=128)
 
+    # determine different blocks by character, add to dict
     state_dict = {}
     for i in range(len(state)):
         for j in range(len(state[0])):
@@ -40,6 +45,7 @@ def get_im_from_state(state):
                 else:
                     state_dict[state[i][j]].append((i,j))
 
+    # use dict to draw current blocks
     for k, v in state_dict.items():
         maxvx = max(v, key = lambda i : i[0])[0]
         maxvy = max(v, key = lambda i : i[1])[1]
@@ -49,13 +55,15 @@ def get_im_from_state(state):
         rect = ((x0+stepx*minvy+buffer,y0+stepy*minvx+buffer),(x0+stepx*(maxvy+1)-buffer,y0+stepy*(maxvx+1)-buffer))
         draw.rectangle(rect,fill="blue",outline='black',width=2)
 
+    # draw exit gates
     draw.rectangle(((xf-25,stepy*2-10),(xf,stepy*2+10)),fill=True)
     draw.rectangle(((xf-25,stepy*3-10),(xf,stepy*3+10)),fill=True)
 
     del draw
 
-    print(state_dict)
+    #print(state_dict)
     
+    # save / show final image
     #image.show()
     image.save("test_state.png")
 
