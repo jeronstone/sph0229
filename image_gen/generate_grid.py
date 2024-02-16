@@ -24,7 +24,10 @@ for i in range(0, image.height, stepx):
     line = ((x0, i), (xf, i))
     draw.line(line, fill=128)
 
+draw.rectangle(((xf-25,stepy*2-10),(xf,stepy*2+10)),fill=True)
+draw.rectangle(((xf-25,stepy*3-10),(xf,stepy*3+10)),fill=True)
+
 del draw
 
-image.save("grid.png")
+image.save("grid_plus_gates.png")
 #image.show()
