@@ -8,6 +8,7 @@ for i in range(1,len(sys.argv)):
     p = sys.argv[i]
 
     # convert .AVI to .wav (video to audio) using ffmpeg
+    # change directory to match your venv path
     command = "ffmpeg -i ~/exit_int_venv/P" + str(p) + ".AVI -ab 160k -ac 2 -ar 44100 -vn audioP" + str(p) + ".wav"
     subprocess.call(command, shell=True)
 
