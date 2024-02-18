@@ -9,7 +9,7 @@ dimx = 7
 dimy = 7
 
 # buffer for block offset from grid squares
-buffer = 5
+buffer = 7
 
 # gate height and width
 gateh = 20
