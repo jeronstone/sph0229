@@ -13,7 +13,7 @@ buffer = 5
 
 # gate height and width
 gateh = 20
-gatew = 25
+gatew = 15
 
 # border size
 borderw = 10
@@ -32,11 +32,11 @@ def get_im_from_state(state):
     # draw grid
     for i in range(0, image.width, stepy):
         line = ((i, y0), (i, yf))
-        draw.line(line, fill=128)
+        draw.line(line, fill='black', width=3)
 
     for i in range(0, image.height, stepx):
         line = ((x0, i), (xf, i))
-        draw.line(line, fill=128)
+        draw.line(line, fill='black', width=3)
 
     # determine different blocks by character, add to dict
     state_dict = {}
@@ -62,13 +62,15 @@ def get_im_from_state(state):
         rect = ((x0 + (stepx*minvy) + buffer, y0 + (stepy*minvx) + buffer),
                 (x0 + (stepx*(maxvy+1)) - buffer, y0 + (stepy*(maxvx+1)) - buffer))
         
-        # TODO change colors based on characters (?), 
-        # or if curr->next state, determine diff and color that way?
-        draw.rectangle(rect, fill="blue", outline='black', width=2)
+        color='blue'
+        if (k == 'A'):
+            color='red'
+
+        draw.rectangle(rect, fill=color, outline='black', width=2)
 
     # draw exit gates
-    draw.rectangle(((x0, (stepy*4) - (gateh/2)), (x0 + gatew, (stepy*4) + (gateh/2))), fill=True)
-    draw.rectangle(((x0, (stepy*5) - (gateh/2)), (x0 + gatew, (stepy*5) + (gateh/2))), fill=True)
+    draw.rectangle(((xf - gatew, (stepy*2) - (gateh/2)), (xf, (stepy*2) + (gateh/2))), fill=True)
+    draw.rectangle(((xf - gatew, (stepy*3) - (gateh/2)), (xf, (stepy*3) + (gateh/2))), fill=True)
     
     del draw
 
