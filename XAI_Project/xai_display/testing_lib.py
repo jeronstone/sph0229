@@ -3,6 +3,8 @@ from time import sleep
 
 display = XAIDisplay()
 
+sleep(5)
+
 display.send_status(1)
 display.send_image("./TM_01.png")
 display.send_exp_text("explanation1")

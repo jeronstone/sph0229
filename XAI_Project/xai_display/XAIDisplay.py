@@ -22,7 +22,7 @@ class XAIDisplay():
             exit(1)
         self.ws_server.set_fn_new_client(new_client)
         threading.Thread(target=self.ws_server.run_forever, name='Local Server', daemon=True).start()
-        webbrowser.open(os.getcwd() + "/index.html")
+        #webbrowser.open(os.getcwd() + "/index.html")
         sleep(1)
     
     def send_image_and_text(self, image, text):
@@ -44,21 +44,19 @@ class XAIDisplay():
         to_send["text_raw"] = text
         self.send_to_display(to_send)
         
-    def send_status(self, turn):
+    def send_status(self, msg):
         to_send = {}
-        to_send["op"] = "status"
-        if (turn == 0):
-            to_send["text_status"] = "Your Turn"
-        else:
-            to_send["text_status"] = "My Turn"
+        to_send["op"] = "status"    
+        to_send["text_status"] = msg
     
         self.send_to_display(to_send)
 
     def send_to_display(self, to_send):
+        # just send it to all clients - should only be one
         for client in self.ws_server.clients:
             self.ws_server.send_message(client, json.dumps(to_send))
 
-# todo probably move this
+# TODO: old I think?
 # policy probs
 prob_good = .3
 prob_okay = .4
