@@ -2,6 +2,13 @@ from PIL import Image, ImageDraw, ImageOps
 import cv2
 import numpy as np
 
+# color def
+_BLUE = (68, 115, 197)
+_LGR = (226, 240, 217)
+_DGR = (114, 172, 69)
+_ARRGR = (167, 210, 139)
+_RED = (251, 1, 2)
+
 # pixel dimension of image
 h = 602
 w = 602
@@ -11,11 +18,16 @@ dimx = 7
 dimy = 7
 
 # buffer for block offset from grid squares
-buffer = 7
+buffer_default = 7
+prev_border_buffer = 20
 
 # gate height and width
 gateh = 20
 gatew = 15
+
+# arrow defs
+arrow_line_width = 15
+arrow_triangle_size = 35
 
 # border size
 borderw = 10
@@ -64,7 +76,8 @@ def get_im_from_state(state, prev):
     if diff == '':
         print("ruh roh diff")
 
-    def get_rect(k, v):
+    def get_rect(k, v, *args, **kwargs):
+        buffer = kwargs.get('buffer', buffer_default)
         maxvx = max(v, key = lambda i : i[0])[0]
         maxvy = max(v, key = lambda i : i[1])[1]
         minvx = min(v, key = lambda i : i[0])[0]
@@ -77,9 +90,9 @@ def get_im_from_state(state, prev):
     for k, v in state_dict.items():
         rect = get_rect(k, v)
         
-        color='blue'
+        color=_BLUE
         if (k == 'A'):
-            color='red'
+            color=_RED
         elif (k == diff or k == 'prev'):
             continue
 
@@ -87,48 +100,59 @@ def get_im_from_state(state, prev):
 
     # get current and previous block info
     prev_rect = get_rect('prev', state_dict['prev'])
+    prev_rect_inner = get_rect('prev',state_dict['prev'],buffer=prev_border_buffer)
     curr_rect = get_rect(diff, state_dict[diff])
 
     # get directional information and create base and point for arrow
-    arrow_info = None
+    arrow_line_info = None
+    arrow_triangle_info = None
     if prev_rect[0][0] > curr_rect[0][0]:
         #left
-        base = (prev_rect[1][0]-40,((prev_rect[0][1]+prev_rect[1][1])//2)+10)
-        point = (curr_rect[0][0]+50, base[1])
-        arrow_info = (base, point)
+        base = (prev_rect[1][0]-40,((prev_rect[0][1]+prev_rect[1][1])//2))
+        point = (curr_rect[0][0]+60, base[1])
+        arrow_line_info = (base, point)
+        arrow_triangle_info = [(point[0],point[1]+arrow_triangle_size),(point[0],point[1]-arrow_triangle_size),(point[0]-arrow_triangle_size,point[1])]
 
     elif prev_rect[0][1] > curr_rect[0][1]:
         #down
-        arrow_info(0,0) #TODO
+        arrow_line_info = (None,None) #TODO
+        arrow_triangle_info = []
 
     elif prev_rect[0][0] < curr_rect[0][0]:
         #right
-        arrow_info(0,0) #TODO
+        arrow_line_info = (None,None) #TODO
+        arrow_triangle_info = []
 
     elif prev_rect[0][1] < curr_rect[0][1]:
         #up
-        arrow_info(0,0) #TODO
+        arrow_line_info = (None,None) #TODO
+        arrow_triangle_info = []
 
-    if not arrow_info:
+    if not arrow_line_info or not arrow_triangle_info:
         print('ruh ruh direction')
 
     # draw previous and current
-    draw.rectangle(prev_rect, fill="yellowgreen", outline='black', width=2)
-    draw.rectangle(curr_rect, fill="green", outline='black', width=2)
+    draw.rectangle(prev_rect, fill=_ARRGR, outline='black', width=2)
+    draw.rectangle(prev_rect_inner, fill=_LGR, width=2)
+    draw.rectangle(curr_rect, fill=_DGR, outline='black', width=2)
 
     # draw exit gates
     draw.rectangle(((xf - gatew, (stepy*2) - (gateh/2)), (xf, (stepy*2) + (gateh/2))), fill=True)
     draw.rectangle(((xf - gatew, (stepy*3) - (gateh/2)), (xf, (stepy*3) + (gateh/2))), fill=True)
     
+    # draw arrow
+    draw.line(arrow_line_info, width=arrow_line_width, fill=_ARRGR)
+    draw.polygon(arrow_triangle_info, fill=_ARRGR)
+
     del draw
 
     # add border
     image = ImageOps.expand(image, border=borderw, fill='black')
 
-    # draw arrow
-    npa = np.array(image)
-    npa = cv2.arrowedLine(npa, arrow_info[0], arrow_info[1], (0,0,0), 5)
-    image = Image.fromarray(npa)
+    # draw arrow (old)
+    # npa = np.array(image)
+    # npa = cv2.arrowedLine(npa, arrow_info[0], arrow_info[1], _ARRGR, 12, tipLength=.2)
+    # image = Image.fromarray(npa)
     
     # rotate 180 deg
     image = image.rotate(180)

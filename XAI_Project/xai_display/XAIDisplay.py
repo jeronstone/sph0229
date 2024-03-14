@@ -22,7 +22,7 @@ class XAIDisplay():
             exit(1)
         self.ws_server.set_fn_new_client(new_client)
         threading.Thread(target=self.ws_server.run_forever, name='Local Server', daemon=True).start()
-        #webbrowser.open(os.getcwd() + "/index.html")
+        webbrowser.open(os.getcwd() + "/index.html")
         sleep(1)
     
     def send_image_and_text(self, image, text):
