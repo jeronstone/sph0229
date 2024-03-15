@@ -32,11 +32,11 @@
             const status = document.getElementById("txt-status");
             if (msg.op == "imgntxt") {
                 image.src = msg.image_link;
-                text.innerHTML = msg.text_raw;
+                text.innerHTML = msg.text;
             } else if (msg.op == "img") {
                 image.src = msg.image_link;
             } else if (msg.op == "txt") {
-                text.innerHTML = msg.text_raw;
+                text.innerHTML = msg.text;
             } else if (msg.op == "status") {
                 status.innerHTML = msg.text_status;
             }

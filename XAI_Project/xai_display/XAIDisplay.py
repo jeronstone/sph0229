@@ -20,16 +20,29 @@ class XAIDisplay():
         except OSError as e:
             print(e)
             exit(1)
+
+        self.xai_highlight_delimiter = "[h]"
+
         self.ws_server.set_fn_new_client(new_client)
         threading.Thread(target=self.ws_server.run_forever, name='Local Server', daemon=True).start()
+
         webbrowser.open(os.getcwd() + "/index.html")
         sleep(1)
+
+    def delimiter_to_mark(self, text):
+        temp = text.split(self.xai_highlight_delimiter)
+        print(temp)
+        prepost = ""
+        for i in range(len(temp)-1):
+            temp[i] = temp[i]+"<"+prepost+"mark>"
+            prepost = "/" if prepost == "" else ""
+        return "".join(temp)
     
     def send_image_and_text(self, image, text):
         to_send = {}
         to_send["op"] = "imgntxt"
         to_send["image_link"] = image
-        to_send["text_raw"] = text
+        to_send["text"] = self.delimiter_to_mark(text)
         self.send_to_display(to_send)
 
     def send_image(self, image):
@@ -41,7 +54,7 @@ class XAIDisplay():
     def send_exp_text(self, text):
         to_send = {}
         to_send["op"] = "txt"
-        to_send["text_raw"] = text
+        to_send["text"] = self.delimiter_to_mark(text)
         self.send_to_display(to_send)
         
     def send_status(self, msg):
