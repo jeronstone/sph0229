@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Demo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container p-2 my-5" style="border:1px solid black">
+        <p class="lead text-center"><strong id="txt-status"> </strong></h1>
+    </div>
+    <div class="container p-2 my-5" style="border:1px solid black">
+        <div class="px-md-1"><div class="container p-2 my-2" style="border:1px solid black">
+            <img id="image-t" src="blank_focal.jpeg" class="img-fluid rounded mx-auto d-block" width="400" height="500">
+        </div></div>
+        <div class="px-md-1"></div><div class="container p-2 my-2" style="border:1px solid black">
+            <p class="lead text-center"><strong id="txt-b"> </strong></h1>
+        </div></div>
+    </div>
+    <script>
+        const socket = new WebSocket("ws://127.0.0.1:8888");
+        socket.addEventListener("open",(event) => {
+            console.log("open");
+        });
+        socket.addEventListener("message",(event) => {
+            console.log("rx");
+            var msg = JSON.parse(event.data);
+            console.log(msg)
+            const image = document.getElementById("image-t");
+            const text = document.getElementById("txt-b");
+            const status = document.getElementById("txt-status");
+            if (msg.op == "imgntxt") {
+                image.src = msg.image_link;
+                text.innerHTML = msg.text;
+            } else if (msg.op == "img") {
+                image.src = msg.image_link;
+            } else if (msg.op == "txt") {
+                text.innerHTML = msg.text;
+            } else if (msg.op == "status") {
+                status.innerHTML = msg.text_status;
+            }
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+</body>
+</html>
+<!--
+    p-5 my-5 bg-info text-white
+    p-5 my-5 bg-success text-white
+    <div id="load-b" class="d-flex justify-content-center">
+            <div class="spinner-border" role="status">
+                <span class="sr-only"></span>
+            </div>
+        </div>
+-->
