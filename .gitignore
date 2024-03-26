@@ -7,3 +7,4 @@
 */exit_interviews/lib*
 */exit_interviews/share
 */__pycache__/
+*.py[cod]
