@@ -302,7 +302,7 @@ def XAI(route_start_goal, cost_node, turnCounter, xaiTurn, xaiCondition):
             print(" ")
         else:
             # Display subtle incorrect XAI **************************************************
-            explanation = "less cool and still swag"
+            explanation = "less [h]cool[h] and still swag"
             display.send_image_and_text(get_im_from_state(subtErr, cur), explanation) 
             print("Subtle Error:")
             print(subtErr)
