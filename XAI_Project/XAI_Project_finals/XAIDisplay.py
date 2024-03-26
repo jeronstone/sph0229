@@ -26,7 +26,7 @@ class XAIDisplay():
         self.ws_server.set_fn_new_client(new_client)
         threading.Thread(target=self.ws_server.run_forever, name='Local Server', daemon=True).start()
 
-        webbrowser.open(os.getcwd() + "/index.html")
+        webbrowser.open('C:/Users/SPH0229/Documents/BaxterCV/XAI_Project/Explanations/sph0229/XAI_Project/XAI_Project_finals/index.html')
         sleep(1)
 
     def delimiter_to_mark(self, text):
