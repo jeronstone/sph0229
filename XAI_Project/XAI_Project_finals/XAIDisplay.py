@@ -26,7 +26,7 @@ class XAIDisplay():
         self.ws_server.set_fn_new_client(new_client)
         threading.Thread(target=self.ws_server.run_forever, name='Local Server', daemon=True).start()
 
-        webbrowser.open('C:/Users/SPH0229/Documents/BaxterCV/XAI_Project/Explanations/sph0229/XAI_Project/XAI_Project_finals/index.html')
+        webbrowser.open('/home/jstone14/sph0229/XAI_Project/XAI_Project_finals/index.html')
         sleep(1)
 
     def delimiter_to_mark(self, text):
@@ -61,7 +61,12 @@ class XAIDisplay():
         to_send = {}
         to_send["op"] = "status"    
         to_send["text_status"] = msg
-    
+        self.send_to_display(to_send)
+
+    def update_progress(self, prog):
+        to_send = {}
+        to_send["op"] = "progress"
+        to_send["prog_num"] = str(prog)
         self.send_to_display(to_send)
 
     def send_to_display(self, to_send):
