@@ -15,20 +15,27 @@ class XAIDisplay():
     ws_server: WebsocketServer
 
     def __init__(self):
+        # initialze websocket server
+        # when html file is opened, javascript on the page will "connect" to this python script via localhost
         try:
             self.ws_server=WebsocketServer(port=8888, host='')
         except OSError as e:
+            # failed to connect
             print(e)
             exit(1)
 
+        # set delimiter for highlighted text for xai text
         self.xai_highlight_delimiter = "[h]"
 
+        # begin websocket connection in new thread
         self.ws_server.set_fn_new_client(new_client)
         threading.Thread(target=self.ws_server.run_forever, name='Local Server', daemon=True).start()
 
+        # open browser to html file
         webbrowser.open('/home/jstone14/sph0229/XAI_Project/XAI_Project_finals/index.html')
         sleep(1)
 
+    # converts delimiter int text to <mark> for html
     def delimiter_to_mark(self, text):
         temp = text.split(self.xai_highlight_delimiter)
         print(temp)

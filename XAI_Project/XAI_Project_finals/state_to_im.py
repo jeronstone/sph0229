@@ -103,6 +103,23 @@ def get_im_from_state(state, prev):
     prev_rect_inner = get_rect('prev',state_dict['prev'],buffer=prev_border_buffer)
     curr_rect = get_rect(diff, state_dict[diff])
 
+    '''
+        the following code is very messy and unreadable and it has some magic numbers :(
+        to get the gist, just know:
+        
+            <prev/curr>_rect[0][0] -> x0 (top left x)
+            <prev/curr>_rect[0][1] -> y0 (top left y)
+            <prev/curr>_rect[1][0] -> x1 (bottom right x)
+            <prev/curr>_rect[1][1] -> x1 (bottom right y)
+        
+        visual:
+        
+        (rect[0][0], rect[0][1])    * ----------------------
+                                    |                       |
+                                    |                       |
+                                     ---------------------- * (rect[1][0], rect[1][1])
+    '''
+
     # get directional information and create base and point for arrow
     arrow_line_info = None
     arrow_triangle_info = None
