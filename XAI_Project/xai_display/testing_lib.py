@@ -1,4 +1,4 @@
-from XAIDisplay import *
+from XAI_Project.XAI_Project_finals.XAIDisplay import *
 from time import sleep
 
 display = XAIDisplay()

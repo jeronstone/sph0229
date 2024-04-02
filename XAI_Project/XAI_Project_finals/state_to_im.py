@@ -113,20 +113,26 @@ def get_im_from_state(state, prev):
         arrow_line_info = (base, point)
         arrow_triangle_info = [(point[0],point[1]+arrow_triangle_size),(point[0],point[1]-arrow_triangle_size),(point[0]-arrow_triangle_size,point[1])]
 
-    elif prev_rect[0][1] > curr_rect[0][1]:
+    elif prev_rect[0][1] < curr_rect[0][1]:
         #down
-        arrow_line_info = (None,None) #TODO
-        arrow_triangle_info = []
+        base = (((prev_rect[0][0]+prev_rect[1][0])//2), prev_rect[0][1]+40)
+        point = (base[0], curr_rect[1][1]-60)
+        arrow_line_info = (base, point)
+        arrow_triangle_info = [(point[0]+arrow_triangle_size,point[1]),(point[0]-arrow_triangle_size,point[1]),(point[0], point[1]+arrow_triangle_size)]
 
     elif prev_rect[0][0] < curr_rect[0][0]:
         #right
-        arrow_line_info = (None,None) #TODO
-        arrow_triangle_info = []
+        base = (prev_rect[0][0]+40,((prev_rect[0][1]+prev_rect[1][1])//2))
+        point = (curr_rect[1][0]-60, base[1])
+        arrow_line_info = (base, point)
+        arrow_triangle_info = [(point[0],point[1]+arrow_triangle_size),(point[0],point[1]-arrow_triangle_size),(point[0]+arrow_triangle_size,point[1])]
 
-    elif prev_rect[0][1] < curr_rect[0][1]:
+    elif prev_rect[0][1] > curr_rect[0][1]:
         #up
-        arrow_line_info = (None,None) #TODO
-        arrow_triangle_info = []
+        base = (((prev_rect[0][0]+prev_rect[1][0])//2), prev_rect[1][1]-40)
+        point = (base[0], curr_rect[0][1]+60)
+        arrow_line_info = (base, point)
+        arrow_triangle_info = [(point[0]+arrow_triangle_size,point[1]),(point[0]-arrow_triangle_size,point[1]),(point[0], point[1]-arrow_triangle_size)]
 
     if not arrow_line_info or not arrow_triangle_info:
         print('ruh ruh direction')
@@ -162,19 +168,21 @@ def get_im_from_state(state, prev):
     image.save("xai_exp.png")
     return "xai_exp.png"
 
-# curState =    [['I', 'I', '_', 'L', 'L','L', 'i'],
-#                ['J', 'J', '_', '_', 'b', '_', 'i'],
-#                ['k', '_', 'A', 'A', 'b', '_', 'h'],
-#                ['k', '_', '_', '_', 'b', '_', 'h'],
-#                ['k', '_', 'd', 'C', 'C', '_', 'g'],
-#                ['m', '_', 'd', '_', '_', '_', 'g'],
-#                ['m', '_', 'E', 'E', '_', 'F', 'F']]  #example
-# prevState =   [['I', 'I', '_', 'L', 'L','L', 'i'],
-#                ['J', 'J', '_', '_', 'b', '_', 'i'],
-#                ['k', '_', 'A', 'A', 'b', '_', 'h'],
-#                ['k', '_', '_', '_', 'b', '_', 'h'],
-#                ['k', '_', 'd', '_', 'C', 'C', 'g'],
-#                ['m', '_', 'd', '_', '_', '_', 'g'],
-#                ['m', '_', 'E', 'E', '_', 'F', 'F']]  #example
+currState =    [['I', 'I', '_', 'L', 'L','L', 'i'],
+               ['J', 'J', '_', '_', 'b', '_', 'i'],
+               ['k', '_', 'A', 'A', 'b', 'h', '_'],
+               ['k', '_', '_', '_', 'b', 'h', '_'],
+               ['k', '_', 'd', 'C', 'C', '_', 'g'],
+               ['m', '_', 'd', '_', '_', '_', 'g'],
+               ['m', '_', 'E', 'E', '_', 'F', 'F']]  #example
 
-# get_im_from_state(curState, prevState)
+
+prevState =   [['I', 'I', '_', 'L', 'L','L', 'i'],
+               ['J', 'J', '_', '_', 'b', '_', 'i'],
+               ['k', '_', 'A', 'A', 'b', '_', '_'],
+               ['k', '_', '_', '_', 'b', '_', '_'],
+               ['k', '_', 'd', 'C', 'C', 'h', 'g'],
+               ['m', '_', 'd', '_', '_', 'h', 'g'],
+               ['m', '_', 'E', 'E', '_', 'F', 'F']]  #example
+
+get_im_from_state(currState, prevState)
