@@ -9,9 +9,6 @@
 <body>
     <div class="container p-2 my-5" style="width: 600px; border:1px solid black">
         <p class="lead text-center"><strong id="txt-status">&nbsp;</strong></p>
-        <div class="progress">
-            <div id="prog_bar" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-        </div>
     </div>
     <div class="container p-2 my-5" style="width: 600px; border:1px solid black">
         <div class="px-md-1"><div class="container p-2 my-2" style="object-fit: cover; border:1px solid black">
@@ -32,7 +29,7 @@
             const image = document.getElementById("image-t");
             const text = document.getElementById("txt-b");
             const status = document.getElementById("txt-status");
-            const progress = document.getElementById("prog_bar");
+            // const progress = document.getElementById("prog_bar");
             if (msg.op == "imgntxt") {
                 image.src = msg.image_link;
                 text.innerHTML = msg.text;
@@ -42,8 +39,8 @@
                 text.innerHTML = msg.text;
             } else if (msg.op == "status") {
                 status.innerHTML = msg.text_status;
-            } else if (msg.op == "progress") {
-                progress.style.width = parseInt(msg.prog_num) + "%";
+            /*} else if (msg.op == "progress") {
+                progress.style.width = parseInt(msg.prog_num) + "%"; */
             }
         });
     </script>

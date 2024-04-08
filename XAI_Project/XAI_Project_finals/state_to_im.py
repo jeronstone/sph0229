@@ -2,6 +2,9 @@ from PIL import Image, ImageDraw, ImageOps
 import cv2
 import numpy as np
 
+# where image is saved
+save_pth = "C:/Users/SPH0229/Documents/BaxterCV/XAI_Project/Explanations/sph0229/XAI_Project/XAI_Project_finals/xai_exp.png"
+
 # color def
 _BLUE = (68, 115, 197)
 _LGR = (226, 240, 217)
@@ -32,7 +35,18 @@ arrow_triangle_size = 35
 # border size
 borderw = 10
 
+# TODO
+def state_str_to_array(state_str):
+    split_lines = state_str.split('\n')
+    acc = []
+    test = [acc+list(line) for line in split_lines]
+    return test
+
 def get_im_from_state(state, prev):
+    if isinstance(state, str):
+        state = state_str_to_array(state)
+        prev = state_str_to_array(prev)
+
     image = Image.new(mode="RGB", size=(h,w), color="white")
 
     draw = ImageDraw.Draw(image)
@@ -64,7 +78,12 @@ def get_im_from_state(state, prev):
                     state_dict[state[i][j]].append((i,j))      
             elif not state[i][j] == prev[i][j]:
                 diff = prev[i][j]
+
+    if diff == '':
+        print("ruh roh diff")
     
+    print("uhhhh: " + diff)
+    print(prev)
     for i in range(len(prev)):
         for j in range(len(prev)):
             if prev[i][j] == diff:
@@ -73,8 +92,6 @@ def get_im_from_state(state, prev):
                 else:
                     state_dict['prev'].append((i,j))
 
-    if diff == '':
-        print("ruh roh diff")
 
     def get_rect(k, v, *args, **kwargs):
         buffer = kwargs.get('buffer', buffer_default)
@@ -182,8 +199,8 @@ def get_im_from_state(state, prev):
     
     # save / show final image
     #image.show()
-    image.save("xai_exp.png")
-    return "xai_exp.png"
+    image.save(save_pth)
+    return save_pth
 
 currState =    [['I', 'I', '_', 'L', 'L','L', 'i'],
                ['J', 'J', '_', '_', 'b', '_', 'i'],
