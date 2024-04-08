@@ -19,6 +19,7 @@
         </div></div>
     </div>
     <script>
+        // creates client for websocket to recieve messages from python script
         const socket = new WebSocket("ws://127.0.0.1:8888");
         socket.addEventListener("open",(event) => {
             console.log("open");

@@ -35,7 +35,7 @@ class XAIDisplay():
         webbrowser.open('C:/Users/SPH0229/Documents/BaxterCV/XAI_Project/Explanations/sph0229/XAI_Project/XAI_Project_finals/index.html')
         sleep(1)
 
-    # converts delimiter int text to <mark> for html
+    # converts delimiter in text (defined in init) to <mark> for html
     def delimiter_to_mark(self, text):
         temp = text.split(self.xai_highlight_delimiter)
         prepost = ""
@@ -44,6 +44,8 @@ class XAIDisplay():
             prepost = "/" if prepost == "" else ""
         return "".join(temp)
     
+    # sends image with explanation at the same time
+    # not any different than sending individually other than it will change the text/image closer together time wise (aka it is faster)
     def send_image_and_text(self, image, text):
         to_send = {}
         to_send["op"] = "imgntxt"
@@ -51,37 +53,43 @@ class XAIDisplay():
         to_send["text"] = self.delimiter_to_mark(text)
         self.send_to_display(to_send)
 
+    # updates xai image with image found at param path
     def send_image(self, image):
         to_send = {}
         to_send["op"] = "img"
         to_send["image_link"] = image
         self.send_to_display(to_send)
 
+    # updates explanation text box with parameter text
     def send_exp_text(self, text):
         to_send = {}
         to_send["op"] = "txt"
         to_send["text"] = self.delimiter_to_mark(text)
         self.send_to_display(to_send)
         
+    # update the "status" bar (top of the page)
+    # call this with the string you want to send
     def send_status(self, msg):
         to_send = {}
         to_send["op"] = "status"    
         to_send["text_status"] = msg
         self.send_to_display(to_send)
 
+    # update value of progress bar - unused, there's no progress bar
     # def update_progress(self, prog):
     #     to_send = {}
     #     to_send["op"] = "progress"
     #     to_send["prog_num"] = str(prog)
     #     self.send_to_display(to_send)
 
+    # internal use function to send messages to websocket client
     def send_to_display(self, to_send):
-        # just send it to all clients - should only be one
+        # just send it to all clients - should only be one anyways
         for client in self.ws_server.clients:
             self.ws_server.send_message(client, json.dumps(to_send))
 
 
-
+# randomly select correct, subtle incorrect, or obvious incorrect
 def get_random_policy():
     # policy probs
     prob_correct = .16
